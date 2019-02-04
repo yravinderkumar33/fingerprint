@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import * as Fingerprint2 from 'fingerprintjs2';
 import * as UAParser from 'ua-parser-js';
 import { fromEvent, BehaviorSubject } from 'rxjs'
-import { map, delay } from 'rxjs/operators'
+import { map, delay, tap } from 'rxjs/operators'
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -10,9 +10,8 @@ import { map, delay } from 'rxjs/operators'
 })
 export class AppComponent implements OnInit {
 
-  title = new BehaviorSubject(0);
-
   calculateFingerPrint() {
+    var fp;
     var options = {
       preprocessor: function (key, value) {
         if (key == "userAgent") {
@@ -65,11 +64,9 @@ export class AppComponent implements OnInit {
     }
 
     Fingerprint2.get(options, (components) => {
-      console.log(JSON.stringify(components));
       var murmur = Fingerprint2.x64hash128(components.map(function (pair) { return pair.value }).join(''), 31)
       console.log(murmur);
     })
-
   }
 
   ngOnInit() {
