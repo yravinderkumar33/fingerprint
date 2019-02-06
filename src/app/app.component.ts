@@ -23,9 +23,6 @@ export class AppComponent implements OnInit {
       },
       audio: {
         timeout: 1000,
-        // On iOS 11, audio context can only be used in response to user interaction.
-        // We require users to explicitly enable audio fingerprinting on iOS 11.
-        // See https://stackoverflow.com/questions/46363048/onaudioprocess-not-called-on-ios11#46534088
         excludeIOS11: true
       },
       fonts: {
@@ -35,7 +32,6 @@ export class AppComponent implements OnInit {
         extendedJsFonts: false
       },
       screen: {
-        // To ensure consistent fingerprints when users rotate their mobile devices
         detectScreenOrientation: true
       },
       plugins: {
@@ -52,11 +48,15 @@ export class AppComponent implements OnInit {
         'doNotTrack': true,
         // uses js fonts already
         'fontsFlash': true,
+        'canvas': true,
         'screenResolution': true,
         'availableScreenResolution': true,
-        'canvas': true,
         'touchSupport': true,
         'plugins': true,
+        'webgl': true,
+        'audio': true,
+        'language': true,
+        'deviceMemory': true
       },
       NOT_AVAILABLE: 'not available',
       ERROR: 'error',
@@ -64,6 +64,7 @@ export class AppComponent implements OnInit {
     }
 
     Fingerprint2.get(options, (components) => {
+      console.log(JSON.stringify(components));
       var murmur = Fingerprint2.x64hash128(components.map(function (pair) { return pair.value }).join(''), 31)
       console.log(murmur);
     })
